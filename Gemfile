@@ -31,11 +31,20 @@ gem 'jbuilder', '~> 2.6'
 # CanCanCan gem for authorization
 gem 'cancancan', '~> 3.4'
 
+# Gems for web scraping
+gem 'nokogirl', '~> 1.0'
+gem 'httparty', '~> 0.21.0'
+
+# Gems for Spotify API
+gem 'rest-client', '~> 2.1'
+gem 'json', '~> 2.6', '>= 2.6.3'
+
 group :development, :test do
   gem 'annotate', '~> 3.2'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   gem 'byebug', '~> 11.1', '>= 11.1.3'
+  gem 'pry-byebug', '~> 3.10', '>= 3.10.1'
   gem 'dotenv-rails', '~> 2.8', '>= 2.8.1'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'faker', '~> 3.1'
@@ -49,6 +58,7 @@ group :development do
   gem 'reek', '~> 6.0', '>= 6.1.3'
   gem 'rubocop', '~> 1.41', '>= 1.41.1'
   gem 'rubocop-rails', '~> 2.20', '>= 2.20.2'
+  
 
   gem 'letter_opener', '~> 1.8', '>= 1.8.1'
 
