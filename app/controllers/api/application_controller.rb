@@ -3,6 +3,11 @@
 module Api
   class ApplicationController < ActionController::API
     include DeviseTokenAuth::Concerns::SetUserByToken
-    before_action :authenticate_api_v1_user!, unless: :devise_controller?
+
+    rescue_from StandardError, with: :render_error
+
+    def render_error(error)
+      render json: { error: error.message }, status: :bad_request
+    end
   end
 end

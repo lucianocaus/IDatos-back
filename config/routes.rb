@@ -7,6 +7,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for "User", at: "auth"
       resources :users, only: [:index]
+      resources :spotify, only: [] do
+        collection do
+          post :create_playlist
+        end
+      end
     end
   end
 
