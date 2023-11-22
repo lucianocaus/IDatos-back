@@ -5,10 +5,11 @@ class Spotify
   require 'json'
 
   def create_playlist_and_add_songs(playlist_name, songs, user_token)
-    playlist_id = create_playlist(playlist_name, user_token)
+    playlist_data = create_playlist(playlist_name, user_token)
     songs.each do |song|
-      add_song_to_playlist(song[:name], song[:artist], playlist_id, user_token)
+      add_song_to_playlist(song[:name], song[:artist], playlist_data[:id], user_token)
     end
+    playlist_data[:url]
   end
 
   def add_song_to_playlist(song_name, artist_name, playlist_id, user_token)
@@ -25,7 +26,7 @@ class Spotify
     }
     endpoint = RestClient.post("https://api.spotify.com/v1/users/#{get_user_data(user_token)["id"]}/playlists", playlist_info.to_json, headers=auth)
     data = JSON.parse(endpoint)
-    data["id"]
+    { id: data["id"], url: data["external_urls"]["spotify"] }
   end
 
   def get_user_data(user_token)
@@ -44,11 +45,6 @@ class Spotify
   end
 
   def generate_auth_url
-    "https://accounts.spotify.com/authorize?client_id=#{ENV['SPOTIFY_CLIENT_ID']}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email%20playlist-modify-public&response_type=token&state=123".html_safe
+    "https://accounts.spotify.com/authorize?client_id=#{ENV['SPOTIFY_CLIENT_ID']}&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2F&scope=user-read-private%20user-read-email%20playlist-modify-public&response_type=token&state=123".html_safe
   end
-
-  def test
-    binding.pry
-  end
-  
 end
