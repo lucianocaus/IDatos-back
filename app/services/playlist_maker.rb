@@ -7,7 +7,7 @@ class PlaylistMaker
     raise 'Soundtrack not found' if songs.empty?
 
     playlist_name = "#{movie_data[:found_movie_name]} Soundtrack"
-    playlist_url = Spotify.new.create_playlist_and_add_songs(playlist_name, songs, user_token)
-    { url: playlist_url, image: movie_data[:image] }
+    playlist_uri = Spotify.new.create_playlist_and_add_songs(playlist_name, songs, user_token)
+    { uri: playlist_uri, image: movie_data[:image] }
   end
 end
