@@ -45,6 +45,6 @@ class Spotify
   end
 
   def generate_auth_url
-    "https://accounts.spotify.com/authorize?client_id=#{ENV['SPOTIFY_CLIENT_ID']}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2F&scope=user-read-private%20user-read-email%20playlist-modify-public&response_type=token&state=123".html_safe
+    "https://accounts.spotify.com/authorize?client_id=#{ENV['SPOTIFY_CLIENT_ID']}&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2F&scope=user-read-private%20user-read-email%20playlist-modify-public&response_type=token&state=123".html_safe
   end
 end
