@@ -9,7 +9,7 @@ class Spotify
     songs.each do |song|
       add_song_to_playlist(song[:name], song[:artist], playlist_data[:id], user_token)
     end
-    playlist_data[:url]
+    playlist_data[:uri]
   end
 
   def add_song_to_playlist(song_name, artist_name, playlist_id, user_token)
@@ -26,7 +26,7 @@ class Spotify
     }
     endpoint = RestClient.post("https://api.spotify.com/v1/users/#{get_user_data(user_token)["id"]}/playlists", playlist_info.to_json, headers=auth)
     data = JSON.parse(endpoint)
-    { id: data["id"], url: data["external_urls"]["spotify"] }
+    { id: data["id"], uri: data["uri"] }
   end
 
   def get_user_data(user_token)
