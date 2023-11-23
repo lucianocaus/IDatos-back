@@ -39,12 +39,16 @@ class Spotify
 
   def get_song_spotify_id(song_name, artist_name, user_token)
     auth = { "Authorization": "Bearer #{user_token}" }
-    song_name = song_name.gsub(" ", "%20")
-    artist_name = artist_name.gsub(" ", "%20")
-    endpoint = RestClient.get("https://api.spotify.com/v1/search?q=#{song_name}%20#{artist_name}&type=track&limit=10&offset=0", headers=auth)
+    processed_song_name = ERB::Util.url_encode(song_name)
+    processed_artist_name = ERB::Util.url_encode(artist_name)
+    endpoint = RestClient.get("https://api.spotify.com/v1/search?q=#{processed_song_name}%20#{processed_artist_name}&type=track&limit=10&offset=0", headers=auth)
     data = JSON.parse(endpoint)
-    return nil unless data["tracks"]["items"][0]
-    data["tracks"]["items"][0]["id"]
+    if ( data["tracks"]["items"][0] && (
+      data["tracks"]["items"][0]["name"].downcase.include?(song_name.downcase) ||
+      song_name.downcase.include?(data["tracks"]["items"][0]["name"].downcase) ))
+      return data["tracks"]["items"][0]["id"]
+    end
+    nil
   end
 
   def generate_auth_url
