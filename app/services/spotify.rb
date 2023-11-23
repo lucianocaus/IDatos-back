@@ -14,8 +14,10 @@ class Spotify
 
   def add_song_to_playlist(song_name, artist_name, playlist_id, user_token)
     song_id = get_song_spotify_id(song_name, artist_name, user_token)
-    auth = { "Authorization": "Bearer #{user_token}" }
-    endpoint = RestClient.post("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks?uris=spotify%3Atrack%3A#{song_id}", {}, headers=auth)
+    if song_id 
+      auth = { "Authorization": "Bearer #{user_token}" } 
+      endpoint = RestClient.post("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks?uris=spotify%3Atrack%3A#{song_id}", {}, headers=auth)
+    end
   end
 
   def create_playlist(playlist_name, user_token)
@@ -41,6 +43,7 @@ class Spotify
     artist_name = artist_name.gsub(" ", "%20")
     endpoint = RestClient.get("https://api.spotify.com/v1/search?q=#{song_name}%20#{artist_name}&type=track&limit=10&offset=0", headers=auth)
     data = JSON.parse(endpoint)
+    return nil unless data["tracks"]["items"][0]
     data["tracks"]["items"][0]["id"]
   end
 
