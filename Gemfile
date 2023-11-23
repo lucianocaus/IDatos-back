@@ -12,24 +12,16 @@ gem 'puma', '~> 5.0'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.4', '>= 1.4.4'
 
-# Use device_token_auth gem for authentication
-gem 'devise_token_auth', '~> 1.2', '>= 1.2.1'
-
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
-gem 'sidekiq', '~> 7.0'
-
 gem 'rack-cors', '~> 1.1', '>= 1.1.1'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'jbuilder', '~> 2.6'
-
-# CanCanCan gem for authorization
-gem 'cancancan', '~> 3.4'
 
 # Gems for web scraping
 gem 'nokogirl', '~> 1.0'
@@ -58,11 +50,7 @@ group :development do
   gem 'reek', '~> 6.0', '>= 6.1.3'
   gem 'rubocop', '~> 1.41', '>= 1.41.1'
   gem 'rubocop-rails', '~> 2.20', '>= 2.20.2'
-  
-
-  gem 'letter_opener', '~> 1.8', '>= 1.8.1'
 
   gem 'better_errors', '~> 2.9', '>= 2.9.1'
 
-  gem 'bullet', '~> 7.0', '>= 7.0.7'
 end
