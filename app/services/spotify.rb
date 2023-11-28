@@ -9,13 +9,15 @@ class Spotify
     songs.each do |song|
       add_song_to_playlist(song[:name], song[:artist], playlist_data[:id], user_token)
     end
-    playlist_data[:url]
+    playlist_data[:uri]
   end
 
   def add_song_to_playlist(song_name, artist_name, playlist_id, user_token)
     song_id = get_song_spotify_id(song_name, artist_name, user_token)
-    auth = { "Authorization": "Bearer #{user_token}" }
-    endpoint = RestClient.post("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks?uris=spotify%3Atrack%3A#{song_id}", {}, headers=auth)
+    if song_id 
+      auth = { "Authorization": "Bearer #{user_token}" } 
+      endpoint = RestClient.post("https://api.spotify.com/v1/playlists/#{playlist_id}/tracks?uris=spotify%3Atrack%3A#{song_id}", {}, headers=auth)
+    end
   end
 
   def create_playlist(playlist_name, user_token)
@@ -26,7 +28,7 @@ class Spotify
     }
     endpoint = RestClient.post("https://api.spotify.com/v1/users/#{get_user_data(user_token)["id"]}/playlists", playlist_info.to_json, headers=auth)
     data = JSON.parse(endpoint)
-    { id: data["id"], url: data["external_urls"]["spotify"] }
+    { id: data["id"], uri: data["uri"] }
   end
 
   def get_user_data(user_token)
@@ -37,11 +39,16 @@ class Spotify
 
   def get_song_spotify_id(song_name, artist_name, user_token)
     auth = { "Authorization": "Bearer #{user_token}" }
-    song_name = song_name.gsub(" ", "%20")
-    artist_name = artist_name.gsub(" ", "%20")
-    endpoint = RestClient.get("https://api.spotify.com/v1/search?q=#{song_name}%20#{artist_name}&type=track&limit=10&offset=0", headers=auth)
+    processed_song_name = ERB::Util.url_encode(song_name)
+    processed_artist_name = ERB::Util.url_encode(artist_name)
+    endpoint = RestClient.get("https://api.spotify.com/v1/search?q=#{processed_song_name}%20#{processed_artist_name}&type=track&limit=10&offset=0", headers=auth)
     data = JSON.parse(endpoint)
-    data["tracks"]["items"][0]["id"]
+    if ( data["tracks"]["items"][0] && (
+      data["tracks"]["items"][0]["name"].downcase.include?(song_name.downcase) ||
+      song_name.downcase.include?(data["tracks"]["items"][0]["name"].downcase) ))
+      return data["tracks"]["items"][0]["id"]
+    end
+    nil
   end
 
   def generate_auth_url

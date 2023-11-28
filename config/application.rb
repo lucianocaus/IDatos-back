@@ -34,6 +34,5 @@ module RailsApi
     config.middleware.use config.session_store, config.session_options
 
     config.api_only = true
-    config.active_job.queue_adapter = :sidekiq
   end
 end
